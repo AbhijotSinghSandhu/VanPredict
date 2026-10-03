@@ -43,11 +43,11 @@ Thumbs.db
 
 # Large/raw datasets
 
-data/
-datasets/
-*.csv
-*.zip
-*.parquet
+# data/
+# datasets/
+# *.csv
+# *.zip
+# *.parquet
 
 # VANPREDICT generated data
 data/3-1-1-service-requests-2009-2021.csv
