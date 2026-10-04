@@ -112,6 +112,7 @@ def main():
                                'Daily 06:00 windows overlap and are correlated; metrics are descriptive, not uncertainty intervals.',
                                'No forecast inputs, arbitrary-hour validation, or live inference.'])
     (ROOT/'docs/history_36h_evaluation.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+    (ROOT/'models').mkdir(exist_ok=True)
     joblib.dump(dict(model=model,calibration=calibrator,features=FEATURES,baseline=baseline,prior=prior,metadata=report),ROOT/'models/history_36h_v1.joblib')
     print(json.dumps(results,indent=2),flush=True)
 

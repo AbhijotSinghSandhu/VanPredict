@@ -10,7 +10,7 @@ import PredictionPanel from './PredictionPanel';
 import usePredictionPreview from './usePredictionPreview';
 import useReports from './useReports';
 import DateFilters, { readSavedRange, formatRange } from './DateFilters';
-import { ArrowDownLeft, ArrowUpRight, CloudRain, Droplets, Info, Layers3, MapPin, MoveUpRight, Radio, ShieldCheck, X } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, CloudRain, Droplets, Info, Layers3, MapPin, MoveUpRight, ShieldCheck, X } from 'lucide-react';
 
 export default function App() {
   const [dateRange, setDateRange] = useState(readSavedRange);
@@ -36,9 +36,8 @@ export default function App() {
     <main id="main" className="page">
       <section className="intro" aria-labelledby="page-title">
         <div><div className="eyebrow"><span/> A CLOSER LOOK AT OUR CITY</div><h1 id="page-title">Understand the rain.<br className="mobile-break"/> See the bigger picture.</h1><p>Exploring drainage, rainfall, and the places where they meet.</p></div>
-        <span className="preview-pill"><Radio size={14}/> Interface preview</span>
       </section>
-      <section className="metrics" aria-label="Dashboard metrics preview">
+      <section className="metrics" aria-label="Dashboard metrics">
         {[
           { label: 'Drainage reports', icon: <Droplets size={19}/>, note: 'Historical 311 requests', foot: reports.status === 'loading' ? 'Loading historical reports' : reports.status === 'error' ? 'Reports unavailable' : 'Prepared Vancouver 311 data', tone: 'teal' },
           { label: 'Rainfall', icon: <CloudRain size={19}/>, note: 'mm/day · city daily average', foot: rainfall.error ? 'Rainfall unavailable' : !rainfall.data ? 'Loading rainfall' : rainfall.data.city.complete ? 'ERA5 estimate · average over covered days' : 'Available days · incomplete coverage', tone: 'blue' },
@@ -69,7 +68,7 @@ export default function App() {
       <section className="context-strip"><span className="context-icon"><MoveUpRight size={19}/></span><div><h3>Built for a better understanding of Vancouver.</h3><p>Connecting public drainage reports with rainfall and spatial data, one layer at a time.</p></div><button onClick={() => aboutDialog.current?.showModal()}>Our approach <ArrowUpRight size={16}/></button></section>
       <footer className="page-footer"><span>VANPREDICT <span className="footer-divider">/</span> Vancouver drainage explorer</span><span>Historical reports are not confirmed flood events.</span></footer>
     </main>
-    <dialog ref={aboutDialog} className="about-dialog" aria-labelledby="about-title"><div className="dialog-heading"><span className="eyebrow">THE PROJECT</span><button className="close-button" aria-label="Close about dialog" onClick={() => aboutDialog.current?.close()}><X size={20}/></button></div><h2 id="about-title">A clearer view of drainage.</h2><p>VanPredict brings together Vancouver's historical 311 drainage reports, rainfall records, and spatial data to explore patterns across the city.</p><p>This prototype displays the real Vancouver grid over a street map. Drainage counts show prepared historical 311 reports for the selected period. Rainfall is an ERA5 liquid-rain estimate; two weather source cells provide the weather detail. Select a cell to inspect its dimensions, or switch grid sizes to explore at a different scale.</p><div className="dialog-note"><ShieldCheck size={21}/><p>A drainage report does not confirm flooding. Model estimates will be clearly labelled and only added after validation.</p></div><button className="primary-button" onClick={() => aboutDialog.current?.close()}>Back to the explorer <ArrowUpRight size={16}/></button></dialog>
+    <dialog ref={aboutDialog} className="about-dialog" aria-labelledby="about-title"><div className="dialog-heading"><span className="eyebrow">THE PROJECT</span><button className="close-button" aria-label="Close about dialog" onClick={() => aboutDialog.current?.close()}><X size={20}/></button></div><h2 id="about-title">A clearer view of drainage.</h2><p>VanPredict brings together Vancouver's historical 311 drainage reports, rainfall records, and spatial data to explore patterns across the city.</p><p>Drainage counts show prepared historical 311 reports for the selected period. Rainfall is an ERA5 liquid-rain estimate; two weather source cells provide the weather detail. Live weather forecasts represent central Vancouver. The model explorer uses historical rain and report inputs to estimate matching reports over 36 hours.</p><div className="dialog-note"><ShieldCheck size={21}/><p>A drainage report does not confirm flooding. Historical model probabilities remain experimental, and the live weather forecast does not influence them.</p></div><button className="primary-button" onClick={() => aboutDialog.current?.close()}>Back to the explorer <ArrowUpRight size={16}/></button></dialog>
   </>;
 }
 
