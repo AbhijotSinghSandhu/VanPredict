@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "grid_cells": 604,
+  "source_cells": [
+    {
+      "weather_cell_id": "era5_49.25_-123.25",
+      "hours": 155495,
+      "days": 6479,
+      "grids_assigned": 272,
+      "liquid_rain_total_mm": 31900.0
+    },
+    {
+      "weather_cell_id": "era5_49.25_-123.00",
+      "hours": 155495,
+      "days": 6479,
+      "grids_assigned": 332,
+      "liquid_rain_total_mm": 36735.6
+    }
+  ],
+  "daily_grid_rows_checked": 3913316,
+  "hourly_grid_sample_rows_checked": 101472,
+  "checks": [
+    "hourly continuity and unique keys",
+    "Vancouver interval dates",
+    "as-of cumulative rain and duration",
+    "trailing rainfall windows",
+    "heavy-rain thresholds",
+    "daily totals and antecedent windows",
+    "full daily grid coverage and exact source feature assignment",
+    "hourly grid loader and sample agreement"
+  ]
+}

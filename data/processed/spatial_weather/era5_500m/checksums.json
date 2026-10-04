@@ -1,0 +1,14 @@
+{
+  "grid_weather_mapping.csv": {
+    "bytes": 52699,
+    "sha256": "b34bb62ad3baa62e7def35a08bd80cfc324eb8e92e9355e61918f3100993dda6"
+  },
+  "weather_hourly_features.csv.gz": {
+    "bytes": 5265596,
+    "sha256": "4682d8b3b80516227992089794f80b8dea5b9728ad72b7f1cf380fb1bc6cb3ae"
+  },
+  "weather_daily_features.csv.gz": {
+    "bytes": 231771,
+    "sha256": "025641195d3dc6fb8239692b2fe3046472fd07eb380e5be46afd86bd6c417f4e"
+  }
+}

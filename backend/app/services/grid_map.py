@@ -1,11 +1,13 @@
 from pathlib import Path
 import math
+import json
 
 import folium
-import geopandas as gpd
 import pandas as pd
 from branca.colormap import LinearColormap
 from folium.plugins import HeatMap, MarkerCluster
+
+from .rainfall_map import add_rainfall_layer
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -13,9 +15,12 @@ PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
 def create_grid_map():
-    grid = gpd.read_file(
-        PROCESSED_DIR / "vancouver_grid.geojson"
-    ).to_crs("EPSG:4326")
+    # The grid builder already writes WGS84 polygons and metric cell areas.
+    collection = json.loads((PROCESSED_DIR / "vancouver_grid.geojson").read_text())
+    crs = collection.get("crs", {}).get("properties", {}).get("name", "")
+    if crs and not any(value in crs for value in ("CRS84", "4326")):
+        raise ValueError("Grid map requires WGS84 longitude/latitude geometry")
+    grid = pd.DataFrame([feature["properties"] for feature in collection["features"]])
 
     reports = pd.read_csv(PROCESSED_DIR / "311_gridded.csv")
     unassigned = pd.read_csv(
@@ -28,8 +33,9 @@ def create_grid_map():
         grid["grid_id"].map(counts).fillna(0).astype(int)
     )
 
-    metric_grid = grid.to_crs("EPSG:32610")
-    grid["area_m2"] = metric_grid.geometry.area.round(2)
+    grid["area_m2"] = pd.to_numeric(grid["area_m2"], errors="raise").round(2)
+    for feature, row in zip(collection["features"], grid.to_dict(orient="records")):
+        feature["properties"].update(row)
 
     max_count = max(1, int(grid["report_count"].max()))
 
@@ -61,9 +67,11 @@ def create_grid_map():
         control_scale=True,
     )
 
+    rainfall_available = (PROCESSED_DIR / "spatial_weather/era5_500m/manifest.json").exists()
     folium.GeoJson(
-        grid.to_json(),
+        collection,
         name="500 m grid — historical counts",
+        show=not rainfall_available,
         style_function=grid_style,
         highlight_function=lambda feature: {
             "weight": 2,
@@ -76,7 +84,10 @@ def create_grid_map():
         ),
     ).add_to(map_view)
 
-    colours.add_to(map_view)
+    if not rainfall_available:
+        colours.add_to(map_view)
+    else:
+        add_rainfall_layer(map_view, collection)
 
     # All assigned reports; repeated locations contribute repeatedly.
     heat_layer = folium.FeatureGroup(
@@ -137,7 +148,10 @@ def create_grid_map():
 
     if not tiny_cells.empty:
         folium.GeoJson(
-            tiny_cells.to_json(),
+            {"type": "FeatureCollection", "features": [
+                feature for feature in collection["features"]
+                if feature["properties"]["area_m2"] < 2500
+            ]},
             name="Tiny boundary cells — under 2,500 m²",
             show=False,
             style_function=lambda feature: {
@@ -152,7 +166,17 @@ def create_grid_map():
         ).add_to(map_view)
 
     # Include the unassigned locations in the initial view.
-    min_x, min_y, max_x, max_y = grid.total_bounds
+    def positions(coordinates):
+        if isinstance(coordinates[0], (int, float)):
+            yield coordinates[:2]
+        else:
+            for child in coordinates:
+                yield from positions(child)
+
+    points = [point for feature in collection["features"]
+              for point in positions(feature["geometry"]["coordinates"])]
+    min_x, max_x = min(p[0] for p in points), max(p[0] for p in points)
+    min_y, max_y = min(p[1] for p in points), max(p[1] for p in points)
 
     if not unassigned.empty:
         min_x = min(min_x, unassigned["longitude"].min())

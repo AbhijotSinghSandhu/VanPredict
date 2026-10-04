@@ -55,6 +55,14 @@ data/3-1-1-service-requests-2009-2021.csv
 data/3-1-1-service-requests.csv
 data/weather/openmeteo_raw
 
+# Spatial rainfall: version the compact source tables and grid lookup.
+data/weather/spatial_era5_raw/
+data/processed/spatial_weather/era5_500m/grid_daily_features.csv.gz
+data/processed/spatial_weather/era5_500m/grid_hourly_first_week.csv.gz
+data/processed/spatial_weather/rainfall_grid_preview.png
+data/processed/vancouver_grid_map.html
+data/processed/spatial_training/
+
 # Model files
 
 models/
