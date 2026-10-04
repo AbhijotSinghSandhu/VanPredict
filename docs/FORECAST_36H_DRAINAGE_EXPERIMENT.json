@@ -1,0 +1,48 @@
+{
+  "splits": {
+    "training": [
+      "2024-03-14T00:00:00-07:00",
+      "2025-07-01T00:00:00-07:00"
+    ],
+    "calibration": [
+      "2025-07-01T00:00:00-07:00",
+      "2025-10-01T00:00:00-07:00"
+    ],
+    "validation": [
+      "2025-10-01T00:00:00-07:00",
+      "2026-01-01T00:00:00-08:00"
+    ],
+    "evaluation": [
+      "2026-01-01T00:00:00-08:00",
+      "2026-09-29T00:00:00-07:00"
+    ]
+  },
+  "parameters": {
+    "max_iter": 80,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 100,
+    "l2_regularization": 10,
+    "early_stopping": false,
+    "random_state": 42
+  },
+  "base_candidate": "more_seasons",
+  "dataset_sha256": "dbde574632af4b3cceb170751a7026e553b7ce017014203ec77d0e1ab7f956d5",
+  "inventory": {
+    "source_url": "https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/sewer-catch-basins",
+    "fetched_at_utc": "2026-10-04T17:32:54.607570+00:00",
+    "source_modified_at": "2026-09-28T13:36:35+00:00",
+    "records": 44975,
+    "sha256": "38f0ad3fbe1da50e403aad39af81985571c62135d69a3a50b7cd6187c2381c5a",
+    "license": "Open Government Licence - Vancouver",
+    "historical_asset_inventory_verified": false,
+    "limitation": "Current inventory snapshot does not establish infrastructure as it existed in earlier forecast years."
+  },
+  "features_added": [
+    "catch_basin_count",
+    "catch_basin_density_per_km2",
+    "catch_basin_nearest_centroid_m"
+  ],
+  "selection": "One fixed candidate; compare 2025 validation before scoring previously inspected 2026 dates",
+  "historical_inventory_verified": false,
+  "promotion_allowed": false
+}

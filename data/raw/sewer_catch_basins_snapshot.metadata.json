@@ -1,0 +1,10 @@
+{
+  "source_url": "https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/sewer-catch-basins",
+  "fetched_at_utc": "2026-10-04T17:32:54.607570+00:00",
+  "source_modified_at": "2026-09-28T13:36:35+00:00",
+  "records": 44975,
+  "sha256": "38f0ad3fbe1da50e403aad39af81985571c62135d69a3a50b7cd6187c2381c5a",
+  "license": "Open Government Licence - Vancouver",
+  "historical_asset_inventory_verified": false,
+  "limitation": "Current inventory snapshot does not establish infrastructure as it existed in earlier forecast years."
+}

@@ -1,0 +1,162 @@
+{
+  "validation": {
+    "baseline_v2": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.11585892900936029,
+      "roc_auc": 0.8128060541090651,
+      "brier_score": 0.02692163090372376,
+      "mean_probability": 0.04309147276535421,
+      "shortlists": {
+        "5": {
+          "precision": 0.14444444444444443,
+          "recall": 0.04262295081967213,
+          "positive_windows_found": 65
+        },
+        "10": {
+          "precision": 0.12666666666666668,
+          "recall": 0.07475409836065573,
+          "positive_windows_found": 114
+        },
+        "20": {
+          "precision": 0.10944444444444444,
+          "recall": 0.12918032786885245,
+          "positive_windows_found": 197
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 5.674669488730682e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 8.524336076632425e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0045242499419733875,
+          "observed_rate": 0.004782928623988227
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.011293909727874042,
+          "observed_rate": 0.008646063281824871
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.017492858807760234,
+          "observed_rate": 0.011589403973509934
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.025429599505687083,
+          "observed_rate": 0.016556291390728478
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.03670260267991201,
+          "observed_rate": 0.023362766740250184
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05430181377672374,
+          "observed_rate": 0.036055923473142015
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0853990474277371,
+          "observed_rate": 0.06199411331861663
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.19562865573022092,
+          "observed_rate": 0.11644591611479028
+        }
+      ]
+    },
+    "catch_basins": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.12333196194608537,
+      "roc_auc": 0.8171753076000602,
+      "brier_score": 0.027120730656256295,
+      "mean_probability": 0.046090057524427526,
+      "shortlists": {
+        "5": {
+          "precision": 0.13555555555555557,
+          "recall": 0.04,
+          "positive_windows_found": 61
+        },
+        "10": {
+          "precision": 0.11222222222222222,
+          "recall": 0.06622950819672131,
+          "positive_windows_found": 101
+        },
+        "20": {
+          "precision": 0.11611111111111111,
+          "recall": 0.13704918032786886,
+          "positive_windows_found": 209
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 4.52563714958529e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 7.17616138610304e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.004288126249600399,
+          "observed_rate": 0.0051508462104488595
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.011265893447321937,
+          "observed_rate": 0.008094186902133923
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.017873382461956775,
+          "observed_rate": 0.010853568800588667
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.02646812979565,
+          "observed_rate": 0.017108167770419427
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.038485322455395654,
+          "observed_rate": 0.02207505518763797
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05718492022403515,
+          "observed_rate": 0.03660779985283297
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.09185453747048886,
+          "observed_rate": 0.05849889624724062
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.21336324515446956,
+          "observed_rate": 0.1210448859455482
+        }
+      ]
+    }
+  },
+  "validation_improved": true,
+  "promotion_allowed": false
+}

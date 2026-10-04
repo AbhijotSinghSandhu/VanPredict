@@ -7,14 +7,34 @@ import { reportColour } from './reportColours';
 const gridCache = new Map<number, FeatureCollection>();
 export type SelectedCell = { id: string; size: number; area: number };
 const cellStyle = { color: '#327c69', weight: 0.8, opacity: 0.7, fillColor: '#72aa95', fillOpacity: 0.18 };
+type BasinAsset = { cells: Record<string, [number,number][]>; source_modified_at: string; source_url: string; license: string };
+let basinCache: BasinAsset | null = null;
 
-export default function CityMap({ gridSize, onLoad, selected, onSelect, counts, reportLayer, predictionScores }: { gridSize: number; onLoad: (count: number) => void; selected: SelectedCell | null; onSelect: (cell: SelectedCell | null) => void; counts: Record<string, number> | null; reportLayer: boolean; predictionScores: Record<string, number> | null }) {
+export default function CityMap({ gridSize, onLoad, selected, onSelect, counts, reportLayer, predictionScores, showBasins = false }: { gridSize: number; onLoad: (count: number) => void; selected: SelectedCell | null; onSelect: (cell: SelectedCell | null) => void; counts: Record<string, number> | null; reportLayer: boolean; predictionScores: Record<string, number> | null; showBasins?: boolean }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const boundsRef = useRef<L.LatLngBounds | null>(null);
   const layerRef = useRef<L.GeoJSON | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [tileError, setTileError] = useState(false);
+  const [basinInfo, setBasinInfo] = useState('');
+  useEffect(() => {
+    const map=mapRef.current;
+    if (!map || !showBasins || !selected || gridSize !== 500) { setBasinInfo(''); return; }
+    const controller=new AbortController();
+    let markers:L.LayerGroup | undefined;
+    setBasinInfo('Loading catch-basin locations…');
+    const request=basinCache ? Promise.resolve(basinCache) : fetch(`${import.meta.env.BASE_URL}infrastructure/catch-basins.json`,{signal:controller.signal}).then(response=>{if(!response.ok)throw new Error('Inventory unavailable');return response.json() as Promise<BasinAsset>;});
+    request.then(data=>{
+      if(controller.signal.aborted)return;
+      if(!data.cells || typeof data.source_modified_at!=='string')throw new Error('Invalid inventory');
+      basinCache=data;
+      const points=data.cells[selected.id] ?? [];
+      markers=L.layerGroup(points.map(([lon,lat])=>L.circleMarker([lat,lon],{radius:4,color:'#fff',weight:1.5,fillColor:'#2263a2',fillOpacity:1,interactive:false}))).addTo(map);
+      setBasinInfo(`${points.length} catch-basin records · approximate locations · snapshot ${data.source_modified_at.slice(0,10)}`);
+    }).catch(()=>{if(!controller.signal.aborted)setBasinInfo('Catch-basin locations unavailable. Toggle the layer to retry.');});
+    return()=>{controller.abort();if(markers)map.removeLayer(markers);};
+  },[selected,showBasins,gridSize,status]);
 
   useEffect(() => {
     if (!container.current) return;
@@ -112,5 +132,6 @@ export default function CityMap({ gridSize, onLoad, selected, onSelect, counts, 
     <button className="fit-map-button" disabled={status !== 'ready'} onClick={() => { if (boundsRef.current) mapRef.current?.fitBounds(boundsRef.current, { padding: [24, 24] }); }}>Fit Vancouver</button>
     {status !== 'ready' && <div className="map-status" role="status">{status === 'loading' ? 'Loading the Vancouver grid…' : 'The grid could not load. Refresh to try again.'}</div>}
     {tileError && <div className="tile-warning" role="status">Street map unavailable. The grid still works.</div>}
+    {showBasins && <div className="basin-map-note" role="status">{selected ? basinInfo : 'Select an area to show catch-basin locations.'}<br/><a href="https://opendata.vancouver.ca/explore/dataset/sewer-catch-basins/information/" target="_blank" rel="noreferrer">City of Vancouver · Open Government Licence</a></div>}
   </div>;
 }

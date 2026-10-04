@@ -1,0 +1,39 @@
+{
+  "grid_cells": 604,
+  "inventory_records": 44975,
+  "assigned_records": 44744,
+  "outside_grid_records": 231,
+  "boundary_extra_matches_resolved": 0,
+  "co_located_coordinate_records": 53,
+  "grids_with_basins": 486,
+  "grids_without_basins": 118,
+  "basin_count_range": [
+    0,
+    220
+  ],
+  "feature_names": [
+    "catch_basin_count",
+    "catch_basin_density_per_km2",
+    "catch_basin_nearest_centroid_m"
+  ],
+  "projected_crs": "EPSG:26910",
+  "density_denominator": "Area of saved grid polygon, which may be clipped at the city boundary",
+  "nearest_distance": "Distance from grid polygon centroid to nearest inventory point, including points outside the grid",
+  "limitations": [
+    "Inventory records are counted; co-located records are retained because no stable asset ID is supplied.",
+    "Catch-basin presence and count do not establish hydraulic capacity, blockage or maintenance condition.",
+    "Locations may be approximate and centroid distance is not a flow path.",
+    "Zero inventory records in a grid does not establish lack of drainage.",
+    "Current inventory cannot establish historically available infrastructure for 2024-2026 predictions."
+  ],
+  "snapshot": {
+    "source_url": "https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/sewer-catch-basins",
+    "fetched_at_utc": "2026-10-04T17:32:54.607570+00:00",
+    "source_modified_at": "2026-09-28T13:36:35+00:00",
+    "records": 44975,
+    "sha256": "38f0ad3fbe1da50e403aad39af81985571c62135d69a3a50b7cd6187c2381c5a",
+    "license": "Open Government Licence - Vancouver",
+    "historical_asset_inventory_verified": false,
+    "limitation": "Current inventory snapshot does not establish infrastructure as it existed in earlier forecast years."
+  }
+}

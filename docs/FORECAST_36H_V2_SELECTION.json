@@ -1,0 +1,318 @@
+{
+  "selected_candidate": "more_seasons",
+  "validation_results": {
+    "more_seasons": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.11585892900936029,
+      "roc_auc": 0.8128060541090651,
+      "brier_score": 0.02692163090372376,
+      "mean_probability": 0.04309147276535421,
+      "shortlists": {
+        "5": {
+          "precision": 0.14444444444444443,
+          "recall": 0.04262295081967213,
+          "positive_windows_found": 65
+        },
+        "10": {
+          "precision": 0.12666666666666668,
+          "recall": 0.07475409836065573,
+          "positive_windows_found": 114
+        },
+        "20": {
+          "precision": 0.10944444444444444,
+          "recall": 0.12918032786885245,
+          "positive_windows_found": 197
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 5.674669488730682e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 8.524336076632425e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0045242499419733875,
+          "observed_rate": 0.004782928623988227
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.011293909727874042,
+          "observed_rate": 0.008646063281824871
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.017492858807760234,
+          "observed_rate": 0.011589403973509934
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.025429599505687083,
+          "observed_rate": 0.016556291390728478
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.03670260267991201,
+          "observed_rate": 0.023362766740250184
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05430181377672374,
+          "observed_rate": 0.036055923473142015
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0853990474277371,
+          "observed_rate": 0.06199411331861663
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.19562865573022092,
+          "observed_rate": 0.11644591611479028
+        }
+      ]
+    },
+    "transitions_80": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.11737196111582905,
+      "roc_auc": 0.8167543683009431,
+      "brier_score": 0.029472455327632083,
+      "mean_probability": 0.05103690318320259,
+      "shortlists": {
+        "5": {
+          "precision": 0.1288888888888889,
+          "recall": 0.0380327868852459,
+          "positive_windows_found": 58
+        },
+        "10": {
+          "precision": 0.12555555555555556,
+          "recall": 0.0740983606557377,
+          "positive_windows_found": 113
+        },
+        "20": {
+          "precision": 0.10777777777777778,
+          "recall": 0.12721311475409836,
+          "positive_windows_found": 194
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 6.326745565489756e-05,
+          "observed_rate": 0.0003679175864606328
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 9.588979223170217e-05,
+          "observed_rate": 0.0007358351729212656
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.004233678980805702,
+          "observed_rate": 0.005334805003679176
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.010492118701290328,
+          "observed_rate": 0.00772626931567329
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.016668824407109095,
+          "observed_rate": 0.012693156732891833
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.02455914559410606,
+          "observed_rate": 0.015084621044885945
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.03640789342025356,
+          "observed_rate": 0.022442972774098603
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05532356295907519,
+          "observed_rate": 0.03348050036791759
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.09163749827726785,
+          "observed_rate": 0.06309786607799853
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.2708871522442315,
+          "observed_rate": 0.11957321559970567
+        }
+      ]
+    },
+    "transitions_160": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.11775747663192611,
+      "roc_auc": 0.8147730748525801,
+      "brier_score": 0.028531000167983413,
+      "mean_probability": 0.04766121700944018,
+      "shortlists": {
+        "5": {
+          "precision": 0.1111111111111111,
+          "recall": 0.03278688524590164,
+          "positive_windows_found": 50
+        },
+        "10": {
+          "precision": 0.11333333333333333,
+          "recall": 0.06688524590163934,
+          "positive_windows_found": 102
+        },
+        "20": {
+          "precision": 0.10888888888888888,
+          "recall": 0.12852459016393442,
+          "positive_windows_found": 196
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 5.780215129600703e-05,
+          "observed_rate": 0.0003679175864606328
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.00011011047014889254,
+          "observed_rate": 0.0007358351729212656
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.004361092100021402,
+          "observed_rate": 0.004966887417218543
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.010684298546169353,
+          "observed_rate": 0.008830022075055188
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.01663659522167574,
+          "observed_rate": 0.012509197939661517
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.02397057007871274,
+          "observed_rate": 0.01582045621780721
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.03499135812643591,
+          "observed_rate": 0.023362766740250184
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05249473882437447,
+          "observed_rate": 0.03384841795437822
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.08534942615985915,
+          "observed_rate": 0.061626195732156
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.24795617841570802,
+          "observed_rate": 0.11846946284032377
+        }
+      ]
+    },
+    "transitions_regularized": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.12549206111979982,
+      "roc_auc": 0.810043733429312,
+      "brier_score": 0.02588643405758087,
+      "mean_probability": 0.03350628380680498,
+      "shortlists": {
+        "5": {
+          "precision": 0.12,
+          "recall": 0.03540983606557377,
+          "positive_windows_found": 54
+        },
+        "10": {
+          "precision": 0.11333333333333333,
+          "recall": 0.06688524590163934,
+          "positive_windows_found": 102
+        },
+        "20": {
+          "precision": 0.10611111111111111,
+          "recall": 0.12524590163934426,
+          "positive_windows_found": 191
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 3.9382752287369114e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.00012747852453571726,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0034875710433349746,
+          "observed_rate": 0.004782928623988227
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.009309875567053025,
+          "observed_rate": 0.00974981604120677
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.014843766673135082,
+          "observed_rate": 0.012325239146431199
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.022006860079173265,
+          "observed_rate": 0.02189109639440765
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.03211454992348545,
+          "observed_rate": 0.022259013980868287
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.046399522274762815,
+          "observed_rate": 0.030537159676232523
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.06932385634235176,
+          "observed_rate": 0.056291390728476824
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.1374099748879304,
+          "observed_rate": 0.12159676232523915
+        }
+      ]
+    }
+  },
+  "selection_rule": "2025 validation top-20 precision, then average precision, then lower Brier score"
+}

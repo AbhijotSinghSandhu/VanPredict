@@ -1,0 +1,89 @@
+{
+  "version": "forecast-36h-v1",
+  "dataset": "data\\processed\\spatial_training\\forecast_36h_full_v2.csv.gz",
+  "splits": {
+    "training": [
+      "2024-03-14T00:00:00-07:00",
+      "2025-01-01T00:00:00-08:00"
+    ],
+    "calibration": [
+      "2025-01-01T00:00:00-08:00",
+      "2025-07-01T00:00:00-07:00"
+    ],
+    "development": [
+      "2025-07-01T00:00:00-07:00",
+      "2026-01-01T00:00:00-08:00"
+    ],
+    "evaluation": [
+      "2026-01-01T00:00:00-08:00",
+      "2026-09-29T00:00:00-07:00"
+    ]
+  },
+  "model_parameters": {
+    "max_iter": 80,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 100,
+    "l2_regularization": 10,
+    "early_stopping": false,
+    "random_state": 42
+  },
+  "history_features": [
+    "centroid_latitude",
+    "centroid_longitude",
+    "month",
+    "day_of_week",
+    "prediction_hour",
+    "rain_past_24h",
+    "rain_past_72h",
+    "rain_past_168h",
+    "reports_past_24h",
+    "reports_past_168h",
+    "reports_past_720h",
+    "historical_reports_per_day"
+  ],
+  "forecast_features": [
+    "centroid_latitude",
+    "centroid_longitude",
+    "month",
+    "day_of_week",
+    "prediction_hour",
+    "rain_past_24h",
+    "rain_past_72h",
+    "rain_past_168h",
+    "reports_past_24h",
+    "reports_past_168h",
+    "reports_past_720h",
+    "historical_reports_per_day",
+    "rain_6h",
+    "rain_12h",
+    "rain_24h",
+    "rain_36h",
+    "showers_6h",
+    "showers_12h",
+    "showers_24h",
+    "showers_36h",
+    "rain_peak_hourly_36h",
+    "rain_peak_3h_36h",
+    "rain_wet_hours_36h",
+    "rain_change_second_half_36h",
+    "showers_peak_hourly_36h",
+    "showers_peak_3h_36h",
+    "showers_wet_hours_36h",
+    "showers_change_second_half_36h",
+    "snowfall_36h_cm",
+    "minimum_temperature_36h_c",
+    "forecast_issue_delay_hours"
+  ],
+  "calibration": "LogisticRegression on model logits; C=1, max_iter=200, seed=42",
+  "primary_metric": "2026 evaluation top-20 precision; matched history-only comparison",
+  "secondary_metrics": [
+    "top-5 and top-10 precision/recall",
+    "average precision",
+    "Brier score",
+    "calibration deciles"
+  ],
+  "boundary_embargo": "Require target end + 24-hour report delay <= next partition start",
+  "uncertainty": "Paired bootstrap of whole calendar-week blocks, 2,000 draws, seed 42",
+  "selection_policy": "One fixed experiment; no tuning or promotion using evaluation results",
+  "dataset_sha256": "dbde574632af4b3cceb170751a7026e553b7ce017014203ec77d0e1ab7f956d5"
+}

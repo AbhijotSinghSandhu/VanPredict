@@ -1,0 +1,463 @@
+{
+  "protocol": {
+    "splits": {
+      "training": [
+        "2024-03-14T00:00:00-07:00",
+        "2025-07-01T00:00:00-07:00"
+      ],
+      "calibration": [
+        "2025-07-01T00:00:00-07:00",
+        "2025-10-01T00:00:00-07:00"
+      ],
+      "validation": [
+        "2025-10-01T00:00:00-07:00",
+        "2026-01-01T00:00:00-08:00"
+      ],
+      "evaluation": [
+        "2026-01-01T00:00:00-08:00",
+        "2026-09-29T00:00:00-07:00"
+      ]
+    },
+    "parameters": {
+      "max_iter": 80,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 100,
+      "l2_regularization": 10,
+      "early_stopping": false,
+      "random_state": 42
+    },
+    "base_candidate": "more_seasons",
+    "dataset_sha256": "dbde574632af4b3cceb170751a7026e553b7ce017014203ec77d0e1ab7f956d5",
+    "inventory": {
+      "source_url": "https://opendata.vancouver.ca/api/explore/v2.1/catalog/datasets/sewer-catch-basins",
+      "fetched_at_utc": "2026-10-04T17:32:54.607570+00:00",
+      "source_modified_at": "2026-09-28T13:36:35+00:00",
+      "records": 44975,
+      "sha256": "38f0ad3fbe1da50e403aad39af81985571c62135d69a3a50b7cd6187c2381c5a",
+      "license": "Open Government Licence - Vancouver",
+      "historical_asset_inventory_verified": false,
+      "limitation": "Current inventory snapshot does not establish infrastructure as it existed in earlier forecast years."
+    },
+    "features_added": [
+      "catch_basin_count",
+      "catch_basin_density_per_km2",
+      "catch_basin_nearest_centroid_m"
+    ],
+    "selection": "One fixed candidate; compare 2025 validation before scoring previously inspected 2026 dates",
+    "historical_inventory_verified": false,
+    "promotion_allowed": false
+  },
+  "validation": {
+    "baseline_v2": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.11585892900936029,
+      "roc_auc": 0.8128060541090651,
+      "brier_score": 0.02692163090372376,
+      "mean_probability": 0.04309147276535421,
+      "shortlists": {
+        "5": {
+          "precision": 0.14444444444444443,
+          "recall": 0.04262295081967213,
+          "positive_windows_found": 65
+        },
+        "10": {
+          "precision": 0.12666666666666668,
+          "recall": 0.07475409836065573,
+          "positive_windows_found": 114
+        },
+        "20": {
+          "precision": 0.10944444444444444,
+          "recall": 0.12918032786885245,
+          "positive_windows_found": 197
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 5.674669488730682e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 8.524336076632425e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0045242499419733875,
+          "observed_rate": 0.004782928623988227
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.011293909727874042,
+          "observed_rate": 0.008646063281824871
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.017492858807760234,
+          "observed_rate": 0.011589403973509934
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.025429599505687083,
+          "observed_rate": 0.016556291390728478
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.03670260267991201,
+          "observed_rate": 0.023362766740250184
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05430181377672374,
+          "observed_rate": 0.036055923473142015
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.0853990474277371,
+          "observed_rate": 0.06199411331861663
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.19562865573022092,
+          "observed_rate": 0.11644591611479028
+        }
+      ]
+    },
+    "catch_basins": {
+      "rows": 54360,
+      "positive_windows": 1525,
+      "prevalence": 0.028053715967623252,
+      "average_precision": 0.12333196194608537,
+      "roc_auc": 0.8171753076000602,
+      "brier_score": 0.027120730656256295,
+      "mean_probability": 0.046090057524427526,
+      "shortlists": {
+        "5": {
+          "precision": 0.13555555555555557,
+          "recall": 0.04,
+          "positive_windows_found": 61
+        },
+        "10": {
+          "precision": 0.11222222222222222,
+          "recall": 0.06622950819672131,
+          "positive_windows_found": 101
+        },
+        "20": {
+          "precision": 0.11611111111111111,
+          "recall": 0.13704918032786886,
+          "positive_windows_found": 209
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 5436,
+          "mean_probability": 4.52563714958529e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 7.17616138610304e-05,
+          "observed_rate": 0.0005518763796909492
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.004288126249600399,
+          "observed_rate": 0.0051508462104488595
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.011265893447321937,
+          "observed_rate": 0.008094186902133923
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.017873382461956775,
+          "observed_rate": 0.010853568800588667
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.02646812979565,
+          "observed_rate": 0.017108167770419427
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.038485322455395654,
+          "observed_rate": 0.02207505518763797
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.05718492022403515,
+          "observed_rate": 0.03660779985283297
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.09185453747048886,
+          "observed_rate": 0.05849889624724062
+        },
+        {
+          "rows": 5436,
+          "mean_probability": 0.21336324515446956,
+          "observed_rate": 0.1210448859455482
+        }
+      ]
+    }
+  },
+  "validation_improved": true,
+  "promotion_allowed": false,
+  "evaluation": {
+    "baseline_v2": {
+      "rows": 162476,
+      "positive_windows": 1761,
+      "prevalence": 0.010838523843521505,
+      "average_precision": 0.06125071159179513,
+      "roc_auc": 0.7871943243126882,
+      "brier_score": 0.010676829278479396,
+      "mean_probability": 0.013643948140157638,
+      "shortlists": {
+        "5": {
+          "precision": 0.048327137546468404,
+          "recall": 0.03691084611016468,
+          "positive_windows_found": 65
+        },
+        "10": {
+          "precision": 0.04312267657992565,
+          "recall": 0.06587166382737081,
+          "positive_windows_found": 116
+        },
+        "20": {
+          "precision": 0.03754646840148699,
+          "recall": 0.11470755252697332,
+          "positive_windows_found": 202
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 16248,
+          "mean_probability": 5.253560518971031e-05,
+          "observed_rate": 0.0
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 6.405487976573932e-05,
+          "observed_rate": 0.00036927621861152144
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.0020282055501539926,
+          "observed_rate": 0.002461841457410143
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.003870846866077447,
+          "observed_rate": 0.005477597242737568
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.0049004562684477875,
+          "observed_rate": 0.005846873461349089
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.006163024851122051,
+          "observed_rate": 0.00775480059084195
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.008145603522343288,
+          "observed_rate": 0.012125315442850988
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.011557261287482874,
+          "observed_rate": 0.011756016495352989
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.01989543272248356,
+          "observed_rate": 0.015325906321166984
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.07976604732711029,
+          "observed_rate": 0.047270265279743956
+        }
+      ]
+    },
+    "catch_basins": {
+      "rows": 162476,
+      "positive_windows": 1761,
+      "prevalence": 0.010838523843521505,
+      "average_precision": 0.060176147315123,
+      "roc_auc": 0.788856519461592,
+      "brier_score": 0.010714121092159872,
+      "mean_probability": 0.013831100695330433,
+      "shortlists": {
+        "5": {
+          "precision": 0.051301115241635685,
+          "recall": 0.039182282793867124,
+          "positive_windows_found": 69
+        },
+        "10": {
+          "precision": 0.04200743494423792,
+          "recall": 0.06416808631459398,
+          "positive_windows_found": 113
+        },
+        "20": {
+          "precision": 0.03754646840148699,
+          "recall": 0.11470755252697332,
+          "positive_windows_found": 202
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 16248,
+          "mean_probability": 3.923686161842247e-05,
+          "observed_rate": 6.154603643525357e-05
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 6.123086862565678e-05,
+          "observed_rate": 0.00036927621861152144
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.0017630012528254374,
+          "observed_rate": 0.0020310192023633676
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.0036409186368250002,
+          "observed_rate": 0.004862136878385032
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.004833768454019975,
+          "observed_rate": 0.006400787789266372
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.006182633157653543,
+          "observed_rate": 0.008554899064500247
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.008213298136476489,
+          "observed_rate": 0.01058656982827599
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.011751442123299753,
+          "observed_rate": 0.013233212285344987
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.020170189331964992,
+          "observed_rate": 0.015387456145749984
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.08165937908924542,
+          "observed_rate": 0.046900966332245955
+        }
+      ]
+    },
+    "previous_forecast_v1": {
+      "rows": 162476,
+      "positive_windows": 1761,
+      "prevalence": 0.010838523843521505,
+      "average_precision": 0.06262078109005252,
+      "roc_auc": 0.782348974909345,
+      "brier_score": 0.010436548717964268,
+      "mean_probability": 0.009451866121849157,
+      "shortlists": {
+        "5": {
+          "precision": 0.05278810408921933,
+          "recall": 0.04031800113571834,
+          "positive_windows_found": 71
+        },
+        "10": {
+          "precision": 0.046096654275092935,
+          "recall": 0.0704145371947757,
+          "positive_windows_found": 124
+        },
+        "20": {
+          "precision": 0.039962825278810406,
+          "recall": 0.12208972174900624,
+          "positive_windows_found": 215
+        }
+      },
+      "calibration_deciles": [
+        {
+          "rows": 16248,
+          "mean_probability": 9.965015939579054e-05,
+          "observed_rate": 6.154603643525357e-05
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.00011142591510878423,
+          "observed_rate": 0.00018463810930576072
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.0024323113217702445,
+          "observed_rate": 0.0027695716395864105
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.003994990308830694,
+          "observed_rate": 0.006154603643525357
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.00516134344530619,
+          "observed_rate": 0.007077794190054161
+        },
+        {
+          "rows": 16248,
+          "mean_probability": 0.006466631271371405,
+          "observed_rate": 0.008062530773018217
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.008087086482763548,
+          "observed_rate": 0.00978642210869699
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.01056556710300977,
+          "observed_rate": 0.011632916846186989
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.01538404185850092,
+          "observed_rate": 0.016002954391579984
+        },
+        {
+          "rows": 16247,
+          "mean_probability": 0.0422179796258576,
+          "observed_rate": 0.046654767033913955
+        }
+      ]
+    }
+  },
+  "paired_top20_vs_baseline": {
+    "forecast_minus_history_precision": 0.0,
+    "ci95": [
+      -0.0031135531135531138,
+      0.003346351447307962
+    ],
+    "week_blocks": 39,
+    "draws": 2000,
+    "method": "Paired resampling of calendar-week blocks; descriptive interval, not an independence guarantee"
+  },
+  "live_model_promoted": false,
+  "limitations": [
+    "Current inventory may contain assets absent in historical years; this is an exploratory spatial comparison.",
+    "2026 comparison dates were already inspected and are not a fresh final test.",
+    "Targets are reported drainage concerns, not confirmed flooding; count does not establish drainage capacity.",
+    "Only two weather source points cover 604 grids. Calibration uses July-September 2025."
+  ]
+}
