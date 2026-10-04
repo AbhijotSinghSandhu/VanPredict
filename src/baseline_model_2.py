@@ -723,18 +723,18 @@ print(
 # 28. SAVE PANEL FOR FUTURE PIPELINE
 # ============================================================
 
-PANEL_FILE = PROJECT_ROOT / "data" / "vanpredict_v02_panel.csv"
+# PANEL_FILE = PROJECT_ROOT / "data" / "vanpredict_v02_panel.csv"
 
-panel.to_csv(
-    PANEL_FILE,
-    index=False
-)
+# panel.to_csv(
+#     PANEL_FILE,
+#     index=False
+# )
 
-print("\nFull v0.2 panel saved to:")
+# print("\nFull v0.2 panel saved to:")
 
-print(
-    PANEL_FILE
-)
+# print(
+#     PANEL_FILE
+# )
 
 print("\nVANPREDICT v0.2 complete.")
 
