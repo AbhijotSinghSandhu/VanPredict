@@ -34,6 +34,7 @@ def create_app(dist: Path = ROOT / "frontend/dist") -> FastAPI:
             ROOT / "docs/model_evaluation.json",
             ROOT / "models/history_36h_v1.joblib",
             *(dist / f"grids/vancouver_{size}m.geojson" for size in (200, 500, 1000)),
+            *(ROOT / f"frontend/public/grids/vancouver_{size}m.geojson" for size in (200, 500, 1000)),
         ]
         missing = [path.name for path in required if not path.is_file()]
         if missing:

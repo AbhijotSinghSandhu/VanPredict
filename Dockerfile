@@ -20,6 +20,7 @@ COPY data/processed/spatial_weather/era5_500m/grid_weather_mapping.csv data/proc
 # Train at image build time so ignored local model files are not required.
 RUN python src/train_history_36h.py
 COPY --from=frontend /frontend/dist /app/frontend/dist
+COPY --from=frontend /frontend/public/grids /app/frontend/public/grids
 RUN useradd --create-home appuser && chown -R appuser:appuser /app
 USER appuser
 EXPOSE 8080
