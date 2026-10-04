@@ -16,6 +16,7 @@ ENV/
 .env
 .env.*
 !.env.example
+!.env.*.example
 
 # Jupyter
 
@@ -36,12 +37,20 @@ Thumbs.db
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
 
 # Logs
 
 *.log
 *.las
 *.lasx
+*.laz
 
 # Large/raw datasets
 
@@ -60,6 +69,7 @@ data/weather/openmeteo_raw_utc/
 # Downloaded installers and application metadata are not training inputs.
 data/raw/*.exe
 data/raw/*.winmd
+data/raw/*.zip
 
 # Spatial rainfall: version the compact source tables and grid lookup.
 data/weather/spatial_era5_raw/
@@ -86,12 +96,28 @@ models/
 tmp/
 temp/
 *.tmp
+*.temp
+*.swp
+*.swo
+*~
 
 # Build files
+
+node_modules/
+.pnpm-store/
+*.tsbuildinfo
+.vite/
+.cache/
+coverage/
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/install-state.gz
 
 build/
 dist/
 *.egg-info/
+*.egg
 
 # Streamlit
 

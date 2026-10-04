@@ -1,0 +1,87 @@
+{
+  "version": "spatial-nextday-v1",
+  "status": "experimental",
+  "grid_size_metres": 500,
+  "target": "At least one matching drainage report on the next Vancouver day",
+  "target_categories": [
+    "Street Surface Water Flooding Case",
+    "Catch Basin Concern Case"
+  ],
+  "horizon": "next calendar day after a completed feature day",
+  "features": [
+    "centroid_latitude",
+    "centroid_longitude",
+    "month",
+    "day_of_year",
+    "day_of_week",
+    "rainfall_today",
+    "max_rain_1h",
+    "max_rain_6h",
+    "max_rain_24h",
+    "heavy_rain_1h",
+    "heavy_rain_6h",
+    "heavy_rain_24h",
+    "rain_duration_hours",
+    "rainfall_previous_day",
+    "rainfall_previous_3d",
+    "rainfall_previous_7d"
+  ],
+  "splits_by_target_date": {
+    "training": [
+      "2019-01-01",
+      "2022-12-31"
+    ],
+    "calibration": [
+      "2023-01-01",
+      "2023-12-31"
+    ],
+    "test": [
+      "2024-01-01",
+      "2026-09-28"
+    ]
+  },
+  "training": {
+    "rows": 882444,
+    "positive_grid_days": 8528,
+    "prevalence": 0.009664069334711324
+  },
+  "calibration": {
+    "rows": 220460,
+    "positive_grid_days": 2409,
+    "prevalence": 0.010927152317880795
+  },
+  "test": {
+    "rows": 605208,
+    "positive_grid_days": 5405,
+    "prevalence": 0.00893081386895084,
+    "average_precision": 0.03110092642073286,
+    "roc_auc": 0.7803245369602488,
+    "brier_score": 0.008765474107087726,
+    "mean_score": 0.010834268564535966,
+    "precision_top20_per_day": 0.027295409181636726,
+    "recall_top20_per_day": 0.10120259019426457
+  },
+  "location_baseline_test": {
+    "rows": 605208,
+    "positive_grid_days": 5405,
+    "prevalence": 0.00893081386895084,
+    "average_precision": 0.020407687416974123,
+    "roc_auc": 0.7241271841701501,
+    "brier_score": 0.008801424059305443,
+    "mean_score": 0.009664069334711324,
+    "precision_top20_per_day": 0.02904191616766467,
+    "recall_top20_per_day": 0.10767807585568917
+  },
+  "beats_location_baseline_on_ap_and_brier": true,
+  "model": "HistGradientBoostingClassifier",
+  "calibration_method": "Sigmoid fitted on 2023 scores",
+  "sklearn_version": "1.9.1",
+  "random_seed": 42,
+  "limitations": [
+    "Predicts reported drainage concerns, not confirmed floods or flood depth.",
+    "Report date span is only a proxy for archive completeness; reporting gaps are not audited.",
+    "Historical daily ERA5 features are retrospective; no live forecast weather is integrated.",
+    "Weather comes from two coarse ERA5 sources; 500 m cells do not have independent rainfall measurements.",
+    "This single chronological holdout has not established production reliability or future calibration."
+  ]
+}

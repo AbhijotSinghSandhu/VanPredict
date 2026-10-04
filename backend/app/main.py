@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from app.routers.reports import router as reports_router
+from app.routers.rainfall import router as rainfall_router
+from app.routers.model_status import router as model_status_router
 
 from app.services.data_loader import load_311, load_rainfall
 from app.services.data_quality import (
@@ -24,6 +27,10 @@ app = FastAPI(
     description="AI-powered Vancouver drainage and flooding prediction system",
     version="1.0.0"
 )
+
+app.include_router(reports_router)
+app.include_router(rainfall_router)
+app.include_router(model_status_router)
 
 
 # ==============================
