@@ -81,17 +81,17 @@ export default function CityMap({ gridSize, onLoad, selected, onSelect, counts, 
       const count = counts ? counts[id] ?? 0 : null;
       const score = predictionScores?.[id];
       const style = predictionScores !== null
-        ? { ...cellStyle, fillColor: score === undefined ? '#edf1e9' : score >= 85 ? '#b26446' : score >= 75 ? '#cf9560' : '#dbbb77', fillOpacity: score === undefined ? 0.08 : 0.85, weight: score === undefined ? 0.5 : 2 }
+        ? { ...cellStyle, fillColor: score === undefined ? '#edf1e9' : score >= Math.max(...Object.values(predictionScores!))*.85 ? '#b26446' : score >= Math.max(...Object.values(predictionScores!))*.65 ? '#cf9560' : '#dbbb77', fillOpacity: score === undefined ? 0.08 : 0.85, weight: score === undefined ? 0.5 : 2 }
         : reportLayer && count !== null
         ? { ...cellStyle, fillColor: reportColour(count), fillOpacity: count === 0 ? 0.22 : 0.8 }
         : cellStyle;
       cell.setStyle(active ? { ...style, color: '#172f29', weight: 3, opacity: 1 } : style);
       cell.getElement()?.setAttribute('aria-pressed', String(active));
-      cell.getElement()?.setAttribute('aria-description', predictionScores !== null ? score === undefined ? 'No demo score for this area' : `Demo score ${score} out of 100. Simulated, not a flood probability.` : count === null ? 'Report counts unavailable' : `${count} historical reports in the selected period`);
+      cell.getElement()?.setAttribute('aria-description', predictionScores !== null ? score === undefined ? 'Outside the top-five highlighted areas' : `Experimental report estimate ${(score*100).toFixed(1)} percent. Not a flood probability.` : count === null ? 'Report counts unavailable' : `${count} historical reports in the selected period`);
       cell.unbindTooltip();
       if (reportLayer || predictionScores !== null) {
         const tooltip = document.createElement('span');
-        tooltip.textContent = `${id} · ${predictionScores !== null ? score === undefined ? 'No demo score' : `DEMO score ${score}/100` : count === null ? 'Reports unavailable' : `${count} report${count === 1 ? '' : 's'}`}`;
+        tooltip.textContent = `${id} · ${predictionScores !== null ? score === undefined ? 'Outside top five' : `Experimental report estimate ${(score*100).toFixed(1)}%` : count === null ? 'Reports unavailable' : `${count} report${count === 1 ? '' : 's'}`}`;
         cell.bindTooltip(tooltip, { sticky: true });
       }
       if (active) cell.bringToFront();
@@ -108,7 +108,7 @@ export default function CityMap({ gridSize, onLoad, selected, onSelect, counts, 
 
   return <div className="map-stage real-map-stage">
     <div ref={container} className="leaflet-map" role="region" aria-label="Vancouver grid map. Use arrow keys to pan and plus or minus to zoom." />
-    <span className="map-preview-label">{gridSize.toLocaleString()} M GRID · {predictionScores !== null ? 'DEMO PREDICTION · SIMULATED' : reportLayer ? counts ? 'HISTORICAL REPORT COUNTS' : 'COUNTS UNAVAILABLE' : 'GRID COVERAGE'}</span>
+    <span className="map-preview-label">{gridSize.toLocaleString()} M GRID · {predictionScores !== null ? 'EXPERIMENTAL · HISTORICAL MODEL' : reportLayer ? counts ? 'HISTORICAL REPORT COUNTS' : 'COUNTS UNAVAILABLE' : 'GRID COVERAGE'}</span>
     <button className="fit-map-button" disabled={status !== 'ready'} onClick={() => { if (boundsRef.current) mapRef.current?.fitBounds(boundsRef.current, { padding: [24, 24] }); }}>Fit Vancouver</button>
     {status !== 'ready' && <div className="map-status" role="status">{status === 'loading' ? 'Loading the Vancouver grid…' : 'The grid could not load. Refresh to try again.'}</div>}
     {tileError && <div className="tile-warning" role="status">Street map unavailable. The grid still works.</div>}
