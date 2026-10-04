@@ -52,6 +52,7 @@ Thumbs.db
 # VANPREDICT generated data
 data/3-1-1-service-requests-2009-2021.csv
 data/3-1-1-service-requests.csv
+data/weather/openmeteo_raw
 
 # Model files
 
