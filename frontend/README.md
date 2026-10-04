@@ -98,3 +98,9 @@ Missing rain, invalid units, and incomplete/discontinuous coverage produce an er
 This replaces the simulated forecast and removes fixture risk rankings and map highlights. Weather represents one central-city point. Model inference and area risk scores remain unconnected; the map continues to show historical reports or grid coverage.
 
 Verification: four forecast parser tests cover interval selection, rain plus showers, missing data, units, continuity and daylight-saving transitions. Run with node --test frontend/tests/liveForecast.test.mjs. TypeScript, production build, and an actual public API request passed.
+
+### Historical model frontend integration
+
+The separate Model explorer calls POST /api/v1/predict at 06:00 Vancouver time for the chosen date. Scores all 604 cells and highlights the top five; ranked rows select matching map areas. Experimental report estimates, historical window and input age are displayed separately from live weather. Historical filters are independent. Changing the grid or date clears results; only 500 m supports predictions. Requests beyond weather coverage display an error with retry. Map layer switching retains results until cleared.
+
+Verified real backend scores, five highlights, ranked selection, date error/recovery, unsupported grid disabling and mobile layout without overflow. TypeScript and production build passed.
