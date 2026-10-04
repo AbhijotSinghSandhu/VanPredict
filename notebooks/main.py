@@ -1,239 +1,720 @@
 import pandas as pd
-
-# ============================================================
-# 1. FILE PATHS
-# ============================================================
-
-OLD_FILE = "../data/3-1-1-service-requests-2009-2021.csv"
-NEW_FILE = "../data/3-1-1-service-requests.csv"
-
-OUTPUT_FILE = "../data/vanpredict_311_drainage.csv"
+import requests
+from pathlib import Path
+import time
 
 
 # ============================================================
-# 2. TARGET SERVICE REQUEST TYPES
+# VANPREDICT
+# HOURLY VANCOUVER RAINFALL
+# OPEN-METEO ERA5
 # ============================================================
 
-TARGET_TYPES = [
-    "Street Surface Water Flooding Case",
-    "Sewer Backup Case",
-    "Catch Basin Concern Case",
-    "Sewer Maintenance Hole Concern Case"
-]
+LATITUDE = 49.19
+LONGITUDE = -123.18
 
+START_YEAR = 2009
+END_YEAR = 2026
 
-# ============================================================
-# 3. LOAD BOTH CSV FILES
-# ============================================================
+START_DATE = f"{START_YEAR}-01-01"
+END_DATE = f"{END_YEAR}-12-31"
 
-print("Loading datasets...")
-
-old_df = pd.read_csv(OLD_FILE, sep=";", low_memory=False)
-new_df = pd.read_csv(NEW_FILE, sep=";", low_memory=False)
-
-print("Old dataset:", len(old_df), "records")
-print("New dataset:", len(new_df), "records")
+API_URL = "https://archive-api.open-meteo.com/v1/archive"
 
 
 # ============================================================
-# 4. STANDARDIZE COLUMN NAMES
+# PATHS
 # ============================================================
 
-def clean_columns(df):
-    df.columns = (
-        df.columns
-        .str.strip()
-        .str.lower()
-        .str.replace(" ", "_")
+OUTPUT_DIR = Path("../data/weather")
+
+RAW_DIR = OUTPUT_DIR / "openmeteo_raw"
+
+OUTPUT_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+RAW_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+OUTPUT_FILE = (
+    OUTPUT_DIR /
+    "vancouver_hourly_rainfall_2009_2026.csv"
+)
+
+
+# ============================================================
+# DOWNLOAD ONE YEAR
+# ============================================================
+
+def download_year(year):
+
+    start_date = f"{year}-01-01"
+    end_date = f"{year}-12-31"
+
+    params = {
+        "latitude": LATITUDE,
+        "longitude": LONGITUDE,
+
+        "start_date": start_date,
+        "end_date": end_date,
+
+        # IMPORTANT:
+        # Hourly precipitation
+        "hourly": "precipitation",
+
+        # ERA5
+        "models": "era5",
+
+        # Vancouver local time
+        "timezone": "America/Vancouver",
+
+        # Millimetres
+        "precipitation_unit": "mm",
+    }
+
+    print(
+        f"      Downloading {start_date} -> {end_date}"
+    )
+
+    response = requests.get(
+        API_URL,
+        params=params,
+        timeout=120
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    # --------------------------------------------------------
+    # Check API response
+    # --------------------------------------------------------
+
+    if "hourly" not in data:
+
+        raise RuntimeError(
+            f"No hourly data returned for {year}"
+        )
+
+    hourly = data["hourly"]
+
+    if "time" not in hourly:
+
+        raise RuntimeError(
+            f"No hourly timestamps returned for {year}"
+        )
+
+    if "precipitation" not in hourly:
+
+        raise RuntimeError(
+            f"No precipitation returned for {year}"
+        )
+
+    # --------------------------------------------------------
+    # Create dataframe
+    # --------------------------------------------------------
+
+    df = pd.DataFrame({
+        "datetime": hourly["time"],
+        "rainfall_mm": hourly["precipitation"]
+    })
+
+    # --------------------------------------------------------
+    # Convert datetime
+    # --------------------------------------------------------
+
+    df["datetime"] = pd.to_datetime(
+        df["datetime"]
+    )
+
+    # --------------------------------------------------------
+    # Convert rainfall
+    # --------------------------------------------------------
+
+    df["rainfall_mm"] = pd.to_numeric(
+        df["rainfall_mm"],
+        errors="coerce"
+    )
+
+    # --------------------------------------------------------
+    # Save raw yearly file
+    # --------------------------------------------------------
+
+    raw_file = (
+        RAW_DIR /
+        f"vancouver_{year}.csv"
+    )
+
+    df.to_csv(
+        raw_file,
+        index=False
     )
 
     return df
 
 
-old_df = clean_columns(old_df)
-new_df = clean_columns(new_df)
-
-
-print("\nOLD COLUMNS:")
-print(old_df.columns.tolist())
-
-print("\nNEW COLUMNS:")
-print(new_df.columns.tolist())
-
-
 # ============================================================
-# 5. FIND COMMON COLUMNS
+# MAIN
 # ============================================================
 
-common_columns = list(
-    set(old_df.columns).intersection(new_df.columns)
+print()
+print("=" * 75)
+print("VANPREDICT")
+print("VANCOUVER HOURLY RAINFALL")
+print("OPEN-METEO ERA5")
+print("=" * 75)
+
+print()
+
+print(
+    f"Coordinates: "
+    f"{LATITUDE}, {LONGITUDE}"
 )
 
-print("\nCommon columns:")
-print(common_columns)
+print(
+    f"Period: "
+    f"{START_YEAR} - {END_YEAR}"
+)
 
+print(
+    "Timezone: America/Vancouver"
+)
 
-# Keep only columns that exist in BOTH datasets
-old_df = old_df[common_columns].copy()
-new_df = new_df[common_columns].copy()
+print(
+    "Variable: hourly precipitation"
+)
+
+print()
 
 
 # ============================================================
-# 6. COMBINE DATASETS
+# DOWNLOAD
 # ============================================================
 
-df = pd.concat(
-    [old_df, new_df],
+all_data = []
+
+failed_years = []
+
+total_years = (
+    END_YEAR -
+    START_YEAR +
+    1
+)
+
+
+for index, year in enumerate(
+    range(
+        START_YEAR,
+        END_YEAR + 1
+    ),
+    start=1
+):
+
+    print(
+        f"[{index:02d}/{total_years:02d}] "
+        f"{year}"
+    )
+
+    try:
+
+        df = download_year(
+            year
+        )
+
+        rainfall_count = (
+            df["rainfall_mm"]
+            .notna()
+            .sum()
+        )
+
+        non_zero_count = (
+            df["rainfall_mm"]
+            .fillna(0)
+            .gt(0)
+            .sum()
+        )
+
+        print(
+            f"      Rows: "
+            f"{len(df):,}"
+        )
+
+        print(
+            f"      Non-null rainfall: "
+            f"{rainfall_count:,}"
+        )
+
+        print(
+            f"      Non-zero rainfall: "
+            f"{non_zero_count:,}"
+        )
+
+        all_data.append(
+            df
+        )
+
+    except Exception as e:
+
+        print(
+            "      FAILED"
+        )
+
+        print(
+            f"      ERROR: {e}"
+        )
+
+        failed_years.append(
+            year
+        )
+
+    # Don't hammer the API
+    time.sleep(0.5)
+
+
+# ============================================================
+# DOWNLOAD SUMMARY
+# ============================================================
+
+print()
+print("=" * 75)
+print("DOWNLOAD FINISHED")
+print("=" * 75)
+
+print()
+
+print(
+    f"Successful years: "
+    f"{len(all_data)} / {total_years}"
+)
+
+print(
+    f"Failed years: "
+    f"{len(failed_years)}"
+)
+
+if failed_years:
+
+    print()
+
+    print(
+        "Failed years:"
+    )
+
+    for year in failed_years:
+
+        print(
+            f"  - {year}"
+        )
+
+
+# ============================================================
+# STOP IF NOTHING DOWNLOADED
+# ============================================================
+
+if not all_data:
+
+    raise RuntimeError(
+        "No rainfall data was downloaded."
+    )
+
+
+# ============================================================
+# COMBINE
+# ============================================================
+
+print()
+
+print(
+    "Combining yearly datasets..."
+)
+
+weather = pd.concat(
+    all_data,
     ignore_index=True
 )
 
-print("\nCombined records:", len(df))
+
+# ============================================================
+# SORT
+# ============================================================
+
+weather = weather.sort_values(
+    "datetime"
+)
 
 
 # ============================================================
-# 7. KEEP ONLY VANPREDICT TARGET EVENTS
+# REMOVE DUPLICATES
 # ============================================================
 
-df = df[
-    df["service_request_type"].isin(TARGET_TYPES)
-].copy()
+before = len(weather)
 
-print("\nRecords after filtering:", len(df))
+weather = weather.drop_duplicates(
+    subset=["datetime"],
+    keep="first"
+)
+
+after = len(weather)
+
+print(
+    f"Duplicate timestamps removed: "
+    f"{before - after:,}"
+)
 
 
 # ============================================================
-# 8. CONVERT DATE
+# RESET INDEX
 # ============================================================
 
-df["service_request_open_timestamp"] = (
-    pd.to_datetime(
-        df["service_request_open_timestamp"],
-        errors="coerce",
-        utc=True
+weather = weather.reset_index(
+    drop=True
+)
+
+
+# ============================================================
+# RAINFALL CLEANING
+# ============================================================
+
+weather["rainfall_mm"] = pd.to_numeric(
+    weather["rainfall_mm"],
+    errors="coerce"
+)
+
+# Negative precipitation should never occur
+weather.loc[
+    weather["rainfall_mm"] < 0,
+    "rainfall_mm"
+] = pd.NA
+
+
+# ============================================================
+# RAINFALL FEATURES
+# ============================================================
+
+print()
+
+print(
+    "Creating rolling rainfall features..."
+)
+
+# For rolling calculations:
+# missing values are temporarily treated as zero.
+
+rain = (
+    weather["rainfall_mm"]
+    .fillna(0)
+)
+
+
+# ------------------------------------------------------------
+# 1 HOUR
+# ------------------------------------------------------------
+
+weather["rain_1h"] = rain
+
+
+# ------------------------------------------------------------
+# 3 HOURS
+# ------------------------------------------------------------
+
+weather["rain_3h"] = (
+    rain
+    .rolling(
+        window=3,
+        min_periods=1
     )
-    .dt.tz_convert("America/Vancouver")
+    .sum()
 )
 
 
-# ============================================================
-# 9. CONVERT COORDINATES TO NUMERIC
-# ============================================================
+# ------------------------------------------------------------
+# 6 HOURS
+# ------------------------------------------------------------
 
-df["latitude"] = pd.to_numeric(
-    df["latitude"],
-    errors="coerce"
-)
-
-df["longitude"] = pd.to_numeric(
-    df["longitude"],
-    errors="coerce"
-)
-
-
-# ============================================================
-# 10. REMOVE DUPLICATES
-# ============================================================
-
-before = len(df)
-
-df = df.drop_duplicates()
-
-after = len(df)
-
-print("\nDuplicates removed:", before - after)
-
-
-# ============================================================
-# 11. SORT BY DATE
-# ============================================================
-
-df = df.sort_values(
-    "service_request_open_timestamp"
+weather["rain_6h"] = (
+    rain
+    .rolling(
+        window=6,
+        min_periods=1
+    )
+    .sum()
 )
 
 
-# ============================================================
-# 12. SHOW BREAKDOWN
-# ============================================================
+# ------------------------------------------------------------
+# 12 HOURS
+# ------------------------------------------------------------
 
-print("\n========================================")
-print("VANPREDICT DATASET")
-print("========================================")
-
-print("\nTotal records:", len(df))
-
-print("\nService request breakdown:")
-
-print(
-    df["service_request_type"]
-    .value_counts()
+weather["rain_12h"] = (
+    rain
+    .rolling(
+        window=12,
+        min_periods=1
+    )
+    .sum()
 )
 
 
-# ============================================================
-# 13. DATE RANGE
-# ============================================================
+# ------------------------------------------------------------
+# 24 HOURS
+# ------------------------------------------------------------
 
-print("\nDate range:")
-
-print(
-    "Start:",
-    df["service_request_open_timestamp"].min()
-)
-
-print(
-    "End:",
-    df["service_request_open_timestamp"].max()
+weather["rain_24h"] = (
+    rain
+    .rolling(
+        window=24,
+        min_periods=1
+    )
+    .sum()
 )
 
 
-# ============================================================
-# 14. MISSING COORDINATES
-# ============================================================
+# ------------------------------------------------------------
+# 48 HOURS
+# ------------------------------------------------------------
 
-print("\nMissing coordinates:")
-
-print(
-    df[["latitude", "longitude"]]
-    .isna()
+weather["rain_48h"] = (
+    rain
+    .rolling(
+        window=48,
+        min_periods=1
+    )
     .sum()
 )
 
 
 # ============================================================
-# 15. MISSING COORDINATES BY TYPE
+# HEAVY RAIN FLAGS
 # ============================================================
 
-print("\nMissing coordinates by service type:")
+weather["heavy_rain_1h"] = (
+    weather["rain_1h"] >= 5
+).astype(int)
 
-missing_coordinates = (
-    df[
-        df[["latitude", "longitude"]]
-        .isna()
-        .any(axis=1)
-    ]
-    ["service_request_type"]
-    .value_counts()
+weather["heavy_rain_6h"] = (
+    weather["rain_6h"] >= 15
+).astype(int)
+
+weather["heavy_rain_24h"] = (
+    weather["rain_24h"] >= 25
+).astype(int)
+
+
+# ============================================================
+# ADD LOCATION
+# ============================================================
+
+weather["latitude"] = LATITUDE
+
+weather["longitude"] = LONGITUDE
+
+weather["weather_source"] = (
+    "Open-Meteo ERA5"
 )
 
-print(missing_coordinates)
-
 
 # ============================================================
-# 16. SAVE FINAL DATASET
+# SAVE FINAL DATASET
 # ============================================================
 
-df.to_csv(
+weather.to_csv(
     OUTPUT_FILE,
     index=False
 )
 
-print("\n========================================")
-print("DONE!")
-print("========================================")
+
+# ============================================================
+# FINAL SUMMARY
+# ============================================================
+
+print()
+print("=" * 75)
+print("SUCCESS")
+print("=" * 75)
+
+print()
 
 print(
-    f"Saved {len(df)} records to:"
+    f"Total hourly records: "
+    f"{len(weather):,}"
 )
 
-print(OUTPUT_FILE)
+print()
+
+print(
+    "Date range:"
+)
+
+print(
+    f"{weather['datetime'].min()} "
+    f"-> "
+    f"{weather['datetime'].max()}"
+)
+
+
+# ============================================================
+# RAINFALL COVERAGE
+# ============================================================
+
+rainfall_records = (
+    weather["rainfall_mm"]
+    .notna()
+    .sum()
+)
+
+missing_rainfall = (
+    weather["rainfall_mm"]
+    .isna()
+    .sum()
+)
+
+coverage = (
+    rainfall_records /
+    len(weather)
+    * 100
+)
+
+print()
+
+print(
+    "Rainfall coverage:"
+)
+
+print(
+    f"  Non-null: "
+    f"{rainfall_records:,}"
+)
+
+print(
+    f"  Missing: "
+    f"{missing_rainfall:,}"
+)
+
+print(
+    f"  Coverage: "
+    f"{coverage:.2f}%"
+)
+
+
+# ============================================================
+# RAINFALL STATISTICS
+# ============================================================
+
+print()
+
+print(
+    "Rainfall statistics:"
+)
+
+print()
+
+print(
+    weather[
+        "rainfall_mm"
+    ].describe()
+)
+
+
+# ============================================================
+# TOTAL RAINFALL
+# ============================================================
+
+print()
+
+print(
+    f"Total rainfall: "
+    f"{weather['rainfall_mm'].sum():.2f} mm"
+)
+
+print(
+    f"Maximum hourly rainfall: "
+    f"{weather['rainfall_mm'].max():.2f} mm"
+)
+
+
+# ============================================================
+# HEAVY RAIN EVENTS
+# ============================================================
+
+print()
+
+print(
+    "Heavy rainfall events:"
+)
+
+print(
+    f"  >= 5 mm/hour: "
+    f"{weather['heavy_rain_1h'].sum():,}"
+)
+
+print(
+    f"  >= 15 mm/6 hours: "
+    f"{weather['heavy_rain_6h'].sum():,}"
+)
+
+print(
+    f"  >= 25 mm/24 hours: "
+    f"{weather['heavy_rain_24h'].sum():,}"
+)
+
+
+# ============================================================
+# SAMPLE RAINFALL EVENTS
+# ============================================================
+
+print()
+
+print(
+    "Sample rainfall events:"
+)
+
+rain_events = weather[
+    weather["rainfall_mm"] > 0
+][
+    [
+        "datetime",
+        "rainfall_mm",
+        "rain_3h",
+        "rain_6h",
+        "rain_12h",
+        "rain_24h",
+        "rain_48h"
+    ]
+]
+
+print()
+
+print(
+    rain_events
+    .head(20)
+    .to_string(index=False)
+)
+
+
+# ============================================================
+# OUTPUT
+# ============================================================
+
+print()
+
+print(
+    "Final dataset saved to:"
+)
+
+print(
+    OUTPUT_FILE.resolve()
+)
+
+print()
+
+print("=" * 75)
+
+print(
+    "VANPREDICT HOURLY RAINFALL READY"
+)
+
+print("=" * 75)
