@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: vanpredict
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: false

@@ -88,6 +88,8 @@ data/processed/elevation/pilot_*
 models/
 *.pkl
 *.joblib
+!deployment/runtime/models/
+!deployment/runtime/models/history_36h_v1.joblib
 *.h5
 *.keras
 

@@ -1,0 +1,18 @@
+{
+  "models/history_36h_v1.joblib": {
+    "bytes": 199934,
+    "sha256": "db3b94d92d9e4e752eec2a8dede3b0c398e5fcd9da6df217a3ad54401181b6a7"
+  },
+  "data/processed/spatial_weather/era5_500m/grid_weather_mapping.csv": {
+    "bytes": 52699,
+    "sha256": "b34bb62ad3baa62e7def35a08bd80cfc324eb8e92e9355e61918f3100993dda6"
+  },
+  "data/processed/spatial_weather/era5_500m/weather_hourly_features.csv.gz": {
+    "bytes": 926434,
+    "sha256": "5a5ec5e9cd01718986c1f4461d7378513d3894be87b20cf4f0ddee6ae2c06b4a"
+  },
+  "data/processed/311_gridded.csv": {
+    "bytes": 3072803,
+    "sha256": "570885a286f81872c1b95da12f42912965e637d8e0cc12614df44b4ce3007f0a"
+  }
+}
