@@ -5,3 +5,4 @@ numpy
 scikit-learn
 geopandas
 shapely
+folium>=0.20,<0.21
