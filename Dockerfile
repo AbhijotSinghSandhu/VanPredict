@@ -4,7 +4,7 @@ RUN npm install --global pnpm@9
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY frontend/ ./
-RUN pnpm build
+RUN npm run build
 
 FROM python:3.14-slim
 WORKDIR /app
